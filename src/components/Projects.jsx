@@ -1,19 +1,8 @@
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import projects from '../data/projects.js'
 
 function Projects({ selected, onSelect }) {
   const project = projects[selected]
-  // neighbors wrap around: the first project's previous is the last, and vice versa
-  const prev = (selected - 1 + projects.length) % projects.length
-  const next = (selected + 1) % projects.length
-
-  // which spot in the title bar each project sits in
-  const slotOf = (i) => {
-    if (i === selected) return 'center'
-    if (i === next) return 'right'
-    if (i === prev) return 'left'
-    return 'hidden'
-  }
 
   // every demo stays loaded and the selected one crossfades in (CSS); only it plays, and only while on screen
   const videoRefs = useRef([])
@@ -39,95 +28,45 @@ function Projects({ selected, onSelect }) {
     }
   }, [selected])
 
-  // title bar: each title is one persistent element that glides to its new spot
-  // (FLIP: measure the new layout, then animate from where it was before)
-  const titleRefs = useRef([])
-  const last = useRef(null) // rects + slots from the previous selection
-  const running = useRef([])
-  useLayoutEffect(() => {
-    running.current.forEach((a) => a.cancel()) // measure untransformed positions
-    running.current = []
-
-    const els = titleRefs.current
-    const slots = projects.map((_, i) => slotOf(i))
-    const rects = projects.map((_, i) => (els[i] && slots[i] !== 'hidden' ? els[i].getBoundingClientRect() : null))
-    const old = last.current
-    last.current = { rects, slots }
-    if (!old || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-    const timing = { duration: 450, easing: 'cubic-bezier(0.25, 1, 0.5, 1)' }
-    projects.forEach((_, i) => {
-      const el = els[i]
-      const now = rects[i]
-      if (!el || !now) return
-      const before = old.rects[i]
-      const wrapped =
-        (old.slots[i] === 'left' && slots[i] === 'right') || (old.slots[i] === 'right' && slots[i] === 'left')
-
-      if (!before || wrapped) {
-        // came around from the other end (or newly visible): fade in from just outside its spot instead of crossing the bar
-        const dx = slots[i] === 'left' ? -40 : 40
-        running.current.push(
-          el.animate([{ transform: `translateX(${dx}px)`, opacity: 0 }, { transform: 'none' }], timing),
-        )
-        return
-      }
-      // slide from the old spot, scaling from the old text size to the new one
-      const dx = before.left + before.width / 2 - (now.left + now.width / 2)
-      const scale = before.height / now.height
-      if (Math.abs(dx) < 1 && Math.abs(scale - 1) < 0.01) return
-      running.current.push(
-        el.animate([{ transform: `translateX(${dx}px) scale(${scale})` }, { transform: 'none' }], timing),
-      )
-    })
-  }, [selected])
-
   return (
     <section id="projects" className="projects">
-      {/* section header + project titles in one bar: current project centered, dimmed neighbors on either side */}
-      <div className="project-bar">
-        <h2 className="project-bar-label">projects</h2>
-        {projects.map((p, i) => {
-          const slot = slotOf(i)
-          return (
+      <h2>projects</h2>
+      {/* video on the left, selector on the right */}
+      <div className="project-stage">
+        <div className="project-player">
+          {projects.map(
+            (p, i) =>
+              p.video && (
+                <video
+                  key={p.video}
+                  ref={(el) => (videoRefs.current[i] = el)}
+                  className={i === selected ? 'active' : undefined}
+                  src={p.video}
+                  preload="auto"
+                  muted
+                  loop
+                  playsInline
+                />
+              ),
+          )}
+          <div className={project.video ? 'project-shade active' : 'project-shade'} />
+
+        </div>
+        {/* grid selector: one node per project, two per row */}
+        <div className="project-grid">
+          {projects.map((p, i) => (
             <button
               key={p.title}
-              ref={(el) => (titleRefs.current[i] = el)}
-              className={`project-title slot-${slot}`}
-              onClick={slot === 'center' ? undefined : () => onSelect(i)}
-              aria-current={slot === 'center' ? 'true' : undefined}
-              tabIndex={slot === 'center' || slot === 'hidden' ? -1 : undefined}
+              className={i === selected ? 'project-node active' : 'project-node'}
+              onClick={() => onSelect(i)}
+              aria-current={i === selected ? 'true' : undefined}
             >
               {/* CSS shows the full title on wide screens and the short keyword on phones */}
               <span className="title-full">{p.title}</span>
               <span className="title-short">{p.keyword}</span>
             </button>
-          )
-        })}
-        {/* invisible copy of the label balances it, so the current title stays centered over the video */}
-        <span className="project-bar-label project-bar-ghost" aria-hidden="true">
-          projects
-        </span>
-      </div>
-
-      <div className="project-player">
-        {projects.map(
-          (p, i) =>
-            p.video && (
-              <video
-                key={p.video}
-                ref={(el) => (videoRefs.current[i] = el)}
-                className={i === selected ? 'active' : undefined}
-                src={p.video}
-                preload="auto"
-                muted
-                loop
-                playsInline
-              />
-            ),
-        )}
-        <div className={project.video ? 'project-shade active' : 'project-shade'} />
-
+          ))}
+        </div>
       </div>
 
       <div className="project-info">
@@ -162,7 +101,7 @@ function Projects({ selected, onSelect }) {
               <circle cx="12" cy="12" r="9" />
               <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
             </svg>
-            live
+            {project.liveLabel || 'live'}
           </a>
         </div>
       </div>

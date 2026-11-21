@@ -50,12 +50,18 @@ h2 {
     padding-inline: var(--indent);
 }
 
+/* projects header stands alone, so it gets the extra space about/contact get from their box's top padding */
+.projects h2 {
+    padding-block: calc(0.375rem + 0.625rem);
+}
+
 a{
   color: inherit;
 }
 
+/* brighter than --accent so links stand out against the dark boxes */
 a.inlineLink {
-    color: var(--accent);
+    color: #b86060;
 }
 
 ul {
@@ -363,87 +369,48 @@ section + section {
     opacity: 1;
 }
 
-/* section header bar: label | left title | current title | right title | invisible label */
-.project-bar {
-    /* equal side columns keep the current title centered whatever the neighbors' lengths */
+/* video on the left, selector on the right; together they span the section width */
+.project-stage {
     display: grid;
-    grid-template-columns: auto 1fr auto 1fr auto;
-    gap: 1rem;
-    align-items: center;
-    margin: 0 0 0.75rem;
-    padding: 0.375rem var(--indent);
-    background-color: var(--dark);
-    border-radius: 0.3rem;
-    box-shadow: var(--shadow);
-    white-space: nowrap;
-    overflow: hidden; /* titles fading in from past the edge stay inside the bar */
+    grid-template-columns: 3fr 1fr;
+    gap: 0.75rem;
+    align-items: start;
 }
 
-/* undo the standalone h2 band styles; the bar draws the band */
-.project-bar-label {
-    grid-row: 1;
-    margin: 0;
-    padding: 0;
-    background: none;
-    box-shadow: none;
-    border-radius: 0;
-    font-size: 1.5rem;
-    font-weight: normal;
+/* grid selector: one column of small project nodes */
+.project-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
 }
 
-.project-bar-ghost {
-    grid-column: 5;
-    visibility: hidden;
-}
-
-/* each title is a button that moves between the left/center/right spots (animated in Projects.jsx) */
-.project-title {
-    grid-row: 1;
-    max-width: 100%;
-    min-width: 0; /* lets long titles shrink and ellipsize inside the grid */
-    padding: 0;
+.project-node {
+    min-width: 0; /* lets long titles ellipsize inside the grid */
+    padding: 0.375rem 0.5rem;
     border: none;
-    background: none;
+    background: var(--dark);
     color: inherit;
     font: inherit;
-    font-size: 1rem;
-    cursor: pointer;
-    opacity: 0.4;
+    font-size: 0.7rem;
+    text-align: left;
+    /* one line each; titles too long for the column end in "…" */
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: opacity 0.45s ease;
+    border-radius: 0.3rem;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
 
-.slot-left {
-    grid-column: 2;
-    justify-self: end;
-}
-
-.slot-center {
-    grid-column: 3;
-    font-size: 1.6rem;
-    opacity: 1;
-    cursor: default;
-}
-
-.slot-right {
-    grid-column: 4;
-    justify-self: start;
-}
-
-.slot-hidden {
-    display: none;
+.project-node:hover,
+.project-node:focus-visible,
+.project-node.active {
+    background: var(--accent);
 }
 
 .title-short {
     display: none;
-}
-
-.slot-left:hover,
-.slot-left:focus-visible,
-.slot-right:hover,
-.slot-right:focus-visible {
-    opacity: 0.8;
 }
 
 /* description on top, tags + github on their own row below */
@@ -534,7 +501,7 @@ section + section {
 
 .about-container {
     background-color: var(--dark);
-    padding: 0.625rem 0;
+    padding: 0.625rem 0 1.25rem;
     box-shadow: var(--shadow);
     border-radius: 0.3rem;
 }
@@ -550,10 +517,15 @@ section + section {
     flex-direction: column;
 }
 
+/* box around the heading and icons, matching the about section */
 .contact-container {
     flex: 1;
     display: flex;
     flex-direction: column;
+    background-color: var(--dark);
+    padding: 0.625rem 0 1.25rem;
+    box-shadow: var(--shadow);
+    border-radius: 0.3rem;
 }
 
 .social-list {
@@ -570,7 +542,7 @@ section + section {
     width: 3.375rem;
     height: 3.375rem;
     border-radius: 50%;
-    background: var(--dark);
+    background: var(--accent);
     text-decoration: none;
     font-size: 0.85rem;
 }
@@ -585,6 +557,7 @@ section + section {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 0.75rem;
     /* full width, flush with the bottom; side padding lines its text up with the content column */
     padding: 1rem var(--page-margin) 1rem
         calc(var(--nav-width) + var(--page-margin));
@@ -598,34 +571,13 @@ section + section {
 
 /* phones: sidebar becomes a top bar */
 @media (max-width: 1200px) {
-    /* phones: "projects" on its own row, short keywords (prev | current | next) centered below */
-    .project-bar {
-        grid-template-columns: 1fr auto 1fr;
-        row-gap: 0.25rem;
+    /* phones: selector stacks above the video */
+    .project-stage {
+        grid-template-columns: 1fr;
     }
 
-    .project-bar-label {
-        grid-column: 1 / -1;
-    }
-
-    .project-bar-ghost {
-        display: none;
-    }
-
-    .project-title {
-        grid-row: 2;
-    }
-
-    .slot-left {
-        grid-column: 1;
-    }
-
-    .slot-center {
-        grid-column: 2;
-    }
-
-    .slot-right {
-        grid-column: 3;
+    .project-grid {
+        order: -1;
     }
 
     .title-full {

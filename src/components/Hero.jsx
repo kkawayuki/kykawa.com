@@ -17,7 +17,7 @@ function Hero() {
 				<h1>kent kawashima</h1>
 				<p>
 					SWE@UCI 4th year student | jp/cn | bay area | interested in
-					fullstack development
+					newgrad roles
 				</p>
 			</div>
 		</section>
