@@ -5,7 +5,7 @@ function About() {
 				<h2>about</h2>
 				<p>
 					I'm Kent Kawashima, a Software Engineering student at UC
-					Irvine graduating June 2027. Based in the bay area, I like working on fullstack projects and creating web interfaces for various types of apps alike.
+					Irvine. Based in the bay area, I like working on fullstack projects and creating web interfaces for various types of apps alike.
 				</p>
 				<p>
 					Beyond my own projects, I’m an Undergraduate Researcher in
@@ -26,8 +26,7 @@ function About() {
 				<p>
 					Outside of code, I make
 					digital illustrations, edit videos, and study Japanese. I'm currently looking for
-					software engineering internships and newgrad jobs for summer
-					2027.
+					software engineering roles for summer 2027.
 				</p>
 			</div>
 		</section>
