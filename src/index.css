@@ -337,7 +337,8 @@ section + section {
 }
 
 /* demo video fills the player as a background, under the title and selector buttons */
-.project-player video {
+.project-player video,
+.project-player img {
     position: absolute;
     inset: 0;
     z-index: 0;
@@ -349,7 +350,70 @@ section + section {
     transition: opacity 0.5s ease;
 }
 
-.project-player video.active {
+.project-player video.active,
+.project-player img.active {
+    opacity: 1;
+}
+
+/* slideshow arrows on the left/right edges of the player */
+.slide-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    display: flex;
+    padding: 0.4rem;
+    border: none;
+    background: rgb(0 0 0 / 0.35);
+    color: var(--text);
+    border-radius: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.slide-arrow.prev {
+    left: 0.5rem;
+}
+
+.slide-arrow.next {
+    right: 0.5rem;
+}
+
+.slide-arrow svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.slide-arrow:hover,
+.slide-arrow:focus-visible {
+    opacity: 1;
+    background: var(--accent);
+}
+
+/* one dot per image along the bottom; the current one is filled */
+.slide-dots {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 50%;
+    z-index: 1;
+    display: flex;
+    gap: 0.4rem;
+    transform: translateX(-50%);
+}
+
+.slide-dots button {
+    width: 0.5rem;
+    height: 0.5rem;
+    padding: 0;
+    border: none;
+    background: var(--text);
+    border-radius: 50%;
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+.slide-dots button.active {
     opacity: 1;
 }
 

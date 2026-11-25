@@ -1,15 +1,26 @@
 import demo1 from '../assets/videos/demo1.mp4'
 import demo2 from '../assets/videos/demo2.mp4'
+import rmgDemo from '../assets/videos/rmgDemo.mp4'
+import cw1 from '../assets/images/project-images/ytLayout/cw1.png'
+import cw2 from '../assets/images/project-images/ytLayout/cw2.png'
+import cw3 from '../assets/images/project-images/ytLayout/cw3.png'
 
 // edit this list to add/change projects; Projects.jsx renders whatever is here
+//
+// media in the player box, pick one per project:
+//   video:  an imported .mp4, plays on loop (e.g. demo1 above)
+//   images: an array of imported stills, browsed with left/right arrows, e.g.
+//             import rate1 from '../assets/images/project-images/rate1.png'
+//             images: [rate1, rate2],
+//   if both are set, the video wins; with neither, the box stays plain
 const projects = [
   {
     title: 'Rate My GroupMates',
     keyword: 'Rate',
     description: 'A groupmate-rating platform built by a 4-person team, with a peer search engine over 9,300+ UCI courses imported from the Anteater API and autocomplete on course code and title. Runs on a TypeScript stack deployed to Vercel serverless functions.',
     tech: ['TypeScript', 'React', 'Express', 'MongoDB Atlas', 'Anteater API'],
-    video: '',
-    thumbnail: '',
+    video: rmgDemo,
+    images: [], // still images; used only when video is empty
     link: 'https://github.com/Ezpresso-depresso/Rate-My-GroupMates',
     live: 'https://rate-my-group-mates-ss5b.vercel.app/',
   },
@@ -19,7 +30,7 @@ const projects = [
     description: "A Chrome extension that injects CSS to restore YouTube's previous layout, with thumbnail resizing and Shorts blocking. Reached 600+ users with a 5.0-star rating on the Chrome Web Store.",
     tech: ['JavaScript', 'HTML', 'CSS', 'Chrome Extensions API'],
     video: '',
-    thumbnail: '',
+    images: [cw1, cw2, cw3], // still images; used only when video is empty
     link: 'https://github.com/kkawayuki/ytLayoutfix',
     live: 'https://chromewebstore.google.com/detail/classic-watch-layout-for/mfabblepdciecekilbabdhmedjejjhmh',
     liveLabel: 'web store', // optional; replaces the live button's text
@@ -27,10 +38,11 @@ const projects = [
   {
     title: 'Participation Quiz Autograder',
     keyword: 'Autograder',
+    hidden: true,
     description: 'Automates participation quiz grading for 165 students, cutting grading time by 10-15x while flagging ambiguous responses for manual review. A web interface lets course staff run grading and draft changes before pushing to Canvas.',
     tech: ['Python', 'HTML', 'CSS', 'JavaScript', 'Canvas API'],
     video: '',
-    thumbnail: '',
+    images: [], // still images; used only when video is empty
     link: '',
     live: '',
   },
@@ -40,7 +52,7 @@ const projects = [
     description: 'A fullstack webapp built with React that uses RESTful API endpoints for the primary usage loop. Leverages Tailwind utility classes and Toast notifications for interactive user feedback.',
     tech: ['React', 'Node.js', 'Express', 'Tailwind CSS', 'MongoDB Atlas'],
     video: demo2,
-    thumbnail: '',
+    images: [], // still images; used only when video is empty
     link: 'https://github.com/kkawayuki/crudMarketplaceFront',
     live: 'https://crud-marketplace-front.vercel.app/',
   },
@@ -50,7 +62,7 @@ const projects = [
     description: 'Converts images to ASCII characters at user-adjustable output widths via slider. The application works by averaging luminance over pixel regions, then mapping them to characters of varying darkness.',
     tech: ['HTML', 'CSS', 'JavaScript', 'Web APIs'],
     video: demo1, // imported above; plays behind the selector buttons
-    thumbnail: '', // e.g. '/images/ascii.png'
+    images: [], // still images; used only when video is empty
     link: 'https://github.com/kkawayuki/asciiArt',
     live: 'https://ascii-art-iota.vercel.app/', // hosted site url; leave '' if none (live button shows greyed out)
   },
@@ -61,27 +73,29 @@ const projects = [
     description: 'A browser blackjack game that uses the Deck of Cards REST API for deck state, shuffling and draws, with async/await handling requests without blocking the UI.',
     tech: ['HTML', 'CSS', 'JavaScript', 'REST APIs'],
     video: '',
-    thumbnail: '',
+    images: [], // still images; used only when video is empty
     link: '',
     live: '',
   },
   {
     title: "Knight's Tour Solver",
     keyword: 'Knight',
+    hidden: true,
     description: "Solves the knight's tour using Warnsdorff's heuristic on a graph representation of a chessboard. Replacing a BST with a left-leaning red-black tree cut runtime by 40%, verified with GTest.",
     tech: ['C++', 'GTest'],
     video: '',
-    thumbnail: '',
+    images: [], // still images; used only when video is empty
     link: 'https://github.com/kkawayuki/KnightsTour',
     live: '',
   },
   {
     title: 'Markov Chain Text Generator',
     keyword: 'Markov',
+    hidden: true,
     description: 'Generates new text by sampling word-to-word transitions learned from input files, tracking word frequencies in a std::unordered_map after sanitizing punctuation and whitespace.',
     tech: ['C++', 'STL'],
     video: '',
-    thumbnail: '',
+    images: [], // still images; used only when video is empty
     link: 'https://github.com/kkawayuki/AI-Text-Gen',
     live: '',
   },

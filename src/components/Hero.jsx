@@ -1,6 +1,6 @@
-import cloud from "../assets/images/cloud.png";
-import laminar from "../assets/images/laminar.jpg";
-import particles from "../assets/images/particles.jpg";
+import cloud from "../assets/images/assets/cloud.png";
+import laminar from "../assets/images/assets/laminar.jpg";
+import particles from "../assets/images/assets/particles.jpg";
 
 function Hero() {
     return (

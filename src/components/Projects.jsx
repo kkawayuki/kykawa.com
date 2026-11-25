@@ -1,8 +1,18 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import projects from '../data/projects.js'
+
+// a project shows its video if it has one, otherwise its images as a slideshow
+const imagesOf = (p) => (p.video ? [] : p.images || [])
 
 function Projects({ selected, onSelect }) {
   const project = projects[selected]
+  const images = imagesOf(project)
+
+  // current slide; tied to the project it was set on, so switching projects starts at the first image
+  const [slideState, setSlideState] = useState({ project: selected, index: 0 })
+  const slide = slideState.project === selected ? slideState.index : 0
+  const step = (dir) =>
+    setSlideState({ project: selected, index: (slide + dir + images.length) % images.length })
 
   // every demo stays loaded and the selected one crossfades in (CSS); only it plays, and only while on screen
   const videoRefs = useRef([])
@@ -49,8 +59,44 @@ function Projects({ selected, onSelect }) {
                 />
               ),
           )}
-          <div className={project.video ? 'project-shade active' : 'project-shade'} />
-
+          {/* every project's images stay mounted so they crossfade like the videos */}
+          {projects.map((p, i) =>
+            imagesOf(p).map((src, j) => (
+              <img
+                key={`${i}-${j}`}
+                className={i === selected && j === slide ? 'active' : undefined}
+                src={src}
+                alt={`${p.title} screenshot ${j + 1}`}
+              />
+            )),
+          )}
+          <div
+            className={project.video || images.length ? 'project-shade active' : 'project-shade'}
+          />
+          {images.length > 1 && (
+            <>
+              <button className="slide-arrow prev" onClick={() => step(-1)} aria-label="previous image">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <path d="M15 5l-7 7 7 7" />
+                </svg>
+              </button>
+              <button className="slide-arrow next" onClick={() => step(1)} aria-label="next image">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <path d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+              <div className="slide-dots">
+                {images.map((_, j) => (
+                  <button
+                    key={j}
+                    className={j === slide ? 'active' : undefined}
+                    onClick={() => setSlideState({ project: selected, index: j })}
+                    aria-label={`image ${j + 1}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
         {/* grid selector: one node per project, two per row */}
         <div className="project-grid">
